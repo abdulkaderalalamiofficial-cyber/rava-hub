@@ -497,6 +497,7 @@ export function CustomerApp() {
         <Section title="نفسك في إيه دلوقتي؟ 😋" subtitle="مول رافا الذكي">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
             {MALL_FOLDERS.filter((f) => f.id !== "mall" && f.id !== "spare").map((f) => {
+              const live = isFolderActive(f);
               return (
                 <button key={f.id}
                   onClick={() => { setOpenFolder(f.id); setMallTab(null); }}
@@ -505,8 +506,8 @@ export function CustomerApp() {
                   <div className="text-2xl mb-1">{f.emoji}</div>
                   <div className="text-xs font-bold leading-tight">{f.title}</div>
                   <div className="text-[10px] text-muted-foreground mt-0.5">{f.desc}</div>
-                  <div className="absolute top-1.5 start-1.5 text-[8px] px-1.5 py-0.5 rounded-full font-bold flex items-center gap-0.5 bg-success/20 text-success">
-                    متاح
+                  <div className={`absolute top-1.5 start-1.5 text-[8px] px-1.5 py-0.5 rounded-full font-bold flex items-center gap-0.5 ${live ? "bg-success/20 text-success" : "bg-muted text-muted-foreground"}`}>
+                    {live ? zoneBadgeAr(f.id, customerZone) : "قريباً في منطقتك"}
                   </div>
                 </button>
               );
@@ -519,6 +520,9 @@ export function CustomerApp() {
               <div className="text-2xl mb-1">📚</div>
               <div className="text-xs font-bold leading-tight">المكتبات والقرطاسيات</div>
               <div className="text-[10px] text-muted-foreground mt-0.5">كتب · قرطاسية · أدوات مدرسية</div>
+              <div className="absolute top-1.5 start-1.5 text-[8px] px-1.5 py-0.5 rounded-full font-bold bg-gold/20 text-gold">
+                {zoneBadgeAr("libraries", customerZone)}
+              </div>
             </button>
           </div>
 
