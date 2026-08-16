@@ -1,0 +1,18 @@
+{
+  "id": "rava-merchant",
+  "name": "RAVA — التاجر",
+  "short_name": "RAVA تاجر",
+  "description": "لوحة التاجر في رافا: كتالوج المنتجات، إدارة المخزون، الحملات الإعلانية، المحفظة والطلبات.",
+  "start_url": "/merchant",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b3b2b",
+  "theme_color": "#046A38",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    { "src": "/icon-merchant.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-merchant.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

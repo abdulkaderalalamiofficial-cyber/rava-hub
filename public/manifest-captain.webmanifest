@@ -1,0 +1,18 @@
+{
+  "id": "rava-captain",
+  "name": "RAVA — الكابتن",
+  "short_name": "RAVA كابتن",
+  "description": "تطبيق الكابتن في رافا: طلبات، ورديات، خريطة حية، محفظة، سلامة ودعم.",
+  "start_url": "/captain",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b3b2b",
+  "theme_color": "#046A38",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    { "src": "/icon-captain.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-captain.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
