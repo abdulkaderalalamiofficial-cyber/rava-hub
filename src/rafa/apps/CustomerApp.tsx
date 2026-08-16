@@ -7,6 +7,7 @@ import { useCustomerBlock } from "../hooks/useCustomerBlock";
 import { SparePartsBreakdownPin } from "../components/SparePartsBreakdownPin";
 import { usePlatformConfig } from "../platformConfig";
 import { BOOKS } from "../data/booksSeed";
+import { filterByZone, isOpenZoneService, checkVehicleZone, zoneBadgeAr } from "../geoZoning";
 
 function CustomerPaymentMethods() {
   const { cfg } = usePlatformConfig();
