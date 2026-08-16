@@ -47,6 +47,131 @@ export type Database = {
         }
         Relationships: []
       }
+      chat_messages: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          sender_role: string
+          sender_user_id: string
+          thread_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          sender_role: string
+          sender_user_id: string
+          thread_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          sender_role?: string
+          sender_user_id?: string
+          thread_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "chat_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_threads: {
+        Row: {
+          captain_user_id: string | null
+          created_at: string
+          customer_user_id: string | null
+          id: string
+          kind: string
+          order_id: string | null
+          topic: string | null
+          updated_at: string
+        }
+        Insert: {
+          captain_user_id?: string | null
+          created_at?: string
+          customer_user_id?: string | null
+          id?: string
+          kind: string
+          order_id?: string | null
+          topic?: string | null
+          updated_at?: string
+        }
+        Update: {
+          captain_user_id?: string | null
+          created_at?: string
+          customer_user_id?: string | null
+          id?: string
+          kind?: string
+          order_id?: string | null
+          topic?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      customer_blocks: {
+        Row: {
+          blocked_until: string | null
+          created_at: string
+          customer_user_id: string
+          ghost_cancel_count: number
+          reason: string
+          updated_at: string
+        }
+        Insert: {
+          blocked_until?: string | null
+          created_at?: string
+          customer_user_id: string
+          ghost_cancel_count?: number
+          reason: string
+          updated_at?: string
+        }
+        Update: {
+          blocked_until?: string | null
+          created_at?: string
+          customer_user_id?: string
+          ghost_cancel_count?: number
+          reason?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      customer_cancellations: {
+        Row: {
+          after_seconds: number | null
+          captain_was_enroute: boolean
+          created_at: string
+          customer_user_id: string
+          id: string
+          order_id: string | null
+          reason: string | null
+        }
+        Insert: {
+          after_seconds?: number | null
+          captain_was_enroute?: boolean
+          created_at?: string
+          customer_user_id: string
+          id?: string
+          order_id?: string | null
+          reason?: string | null
+        }
+        Update: {
+          after_seconds?: number | null
+          captain_was_enroute?: boolean
+          created_at?: string
+          customer_user_id?: string
+          id?: string
+          order_id?: string | null
+          reason?: string | null
+        }
+        Relationships: []
+      }
       medical_bookings: {
         Row: {
           branch_id: string
@@ -143,6 +268,66 @@ export type Database = {
           partner_name?: string
           partner_nid?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      order_verifications: {
+        Row: {
+          bypass_reason: string | null
+          captain_role: string | null
+          captain_user_id: string | null
+          cargo_only: boolean
+          created_at: string
+          delivered_at: string | null
+          delivery_photo_url: string | null
+          id: string
+          meta: Json
+          order_id: string
+          otp_attempts: number
+          otp_code_hash: string | null
+          otp_verified_at: string | null
+          pickup_at: string | null
+          pickup_photo_url: string | null
+          updated_at: string
+          weight_kg: number | null
+        }
+        Insert: {
+          bypass_reason?: string | null
+          captain_role?: string | null
+          captain_user_id?: string | null
+          cargo_only?: boolean
+          created_at?: string
+          delivered_at?: string | null
+          delivery_photo_url?: string | null
+          id?: string
+          meta?: Json
+          order_id: string
+          otp_attempts?: number
+          otp_code_hash?: string | null
+          otp_verified_at?: string | null
+          pickup_at?: string | null
+          pickup_photo_url?: string | null
+          updated_at?: string
+          weight_kg?: number | null
+        }
+        Update: {
+          bypass_reason?: string | null
+          captain_role?: string | null
+          captain_user_id?: string | null
+          cargo_only?: boolean
+          created_at?: string
+          delivered_at?: string | null
+          delivery_photo_url?: string | null
+          id?: string
+          meta?: Json
+          order_id?: string
+          otp_attempts?: number
+          otp_code_hash?: string | null
+          otp_verified_at?: string | null
+          pickup_at?: string | null
+          pickup_photo_url?: string | null
+          updated_at?: string
+          weight_kg?: number | null
         }
         Relationships: []
       }
@@ -305,6 +490,83 @@ export type Database = {
           target_name?: string
           target_role?: string
           username?: string | null
+        }
+        Relationships: []
+      }
+      shift_bookings: {
+        Row: {
+          captain_user_id: string
+          created_at: string
+          id: string
+          shift_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          captain_user_id: string
+          created_at?: string
+          id?: string
+          shift_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          captain_user_id?: string
+          created_at?: string
+          id?: string
+          shift_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shift_bookings_shift_id_fkey"
+            columns: ["shift_id"]
+            isOneToOne: false
+            referencedRelation: "shifts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shifts: {
+        Row: {
+          booked_count: number
+          capacity: number
+          center: string | null
+          created_at: string
+          ends_at: string
+          fleet: string
+          governorate: string | null
+          id: string
+          notes: string | null
+          starts_at: string
+          updated_at: string
+        }
+        Insert: {
+          booked_count?: number
+          capacity?: number
+          center?: string | null
+          created_at?: string
+          ends_at: string
+          fleet: string
+          governorate?: string | null
+          id?: string
+          notes?: string | null
+          starts_at: string
+          updated_at?: string
+        }
+        Update: {
+          booked_count?: number
+          capacity?: number
+          center?: string | null
+          created_at?: string
+          ends_at?: string
+          fleet?: string
+          governorate?: string | null
+          id?: string
+          notes?: string | null
+          starts_at?: string
+          updated_at?: string
         }
         Relationships: []
       }
