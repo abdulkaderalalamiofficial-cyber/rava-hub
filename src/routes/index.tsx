@@ -1,24 +1,48 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { I18nProvider } from "@/rafa/i18n";
+import { StoreProvider } from "@/rafa/store";
+import { Gateway, type GatewayRole } from "@/rafa/gateway/Gateway";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
   component: Index,
+  head: () => ({
+    meta: [
+      { title: "Rava Super App — منصة التنقل والتجارة الذكية" },
+      { name: "description", content: "منصة رافا الموحدة: رحلات، توصيل، شحن، تجارة، خدمات طبية وامتياز المناطق — بواجهة عربية/إنجليزية ولكل دور شاشة مستقلة." },
+      { property: "og:title", content: "Rava Super App — منصة التنقل والتجارة الذكية" },
+      { property: "og:description", content: "رحلات، توصيل، شحن، تجارة وخدمات طبية في تطبيق واحد." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+    links: [
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "apple-touch-icon", href: "/icon-512.png" },
+      { rel: "icon", type: "image/png", href: "/icon-512.png" },
+    ],
+  }),
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+const ROLE_PATH: Record<GatewayRole, string> = {
+  customer: "/customer",
+  merchant: "/merchant",
+  medical: "/medical",
+  partner: "/partner",
+  admin: "/admin",
+  captain: "/captain",
+  captainUnified: "/captain",
+};
+
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <I18nProvider>
+      <StoreProvider>
+        <GatewayRouter />
+      </StoreProvider>
+    </I18nProvider>
   );
+}
+
+function GatewayRouter() {
+  const navigate = useNavigate();
+  return <Gateway onEnter={(_country, role) => navigate({ to: ROLE_PATH[role] })} />;
 }

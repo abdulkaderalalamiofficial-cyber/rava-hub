@@ -1,0 +1,18 @@
+{
+  "id": "rava-admin",
+  "name": "RAVA — غرفة التحكم",
+  "short_name": "RAVA أدمن",
+  "description": "غرفة التحكم المركزية في رافا: لوحة تحكم لطاقم الإدارة والمشرفين.",
+  "start_url": "/admin",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b3b2b",
+  "theme_color": "#046A38",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    { "src": "/icon-admin.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-admin.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

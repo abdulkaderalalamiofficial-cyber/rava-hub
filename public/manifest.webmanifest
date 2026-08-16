@@ -1,0 +1,23 @@
+{
+  "name": "RAVA Super App",
+  "short_name": "RAVA",
+  "description": "RAVA Super App — mobility, delivery, commerce and services.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b3b2b",
+  "theme_color": "#046A38",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "العميل", "url": "/customer" },
+    { "name": "الكابتن", "url": "/captain" },
+    { "name": "التاجر", "url": "/merchant" },
+    { "name": "غرفة التحكم", "url": "/admin" }
+  ]
+}
