@@ -14,7 +14,330 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      audit_log: {
+        Row: {
+          action_type: string
+          created_at: string
+          details: string
+          id: string
+          owner_id: string
+          partner_name: string
+          partner_nid: string
+          seq: number
+        }
+        Insert: {
+          action_type: string
+          created_at?: string
+          details: string
+          id?: string
+          owner_id: string
+          partner_name: string
+          partner_nid: string
+          seq: number
+        }
+        Update: {
+          action_type?: string
+          created_at?: string
+          details?: string
+          id?: string
+          owner_id?: string
+          partner_name?: string
+          partner_nid?: string
+          seq?: number
+        }
+        Relationships: []
+      }
+      medical_bookings: {
+        Row: {
+          branch_id: string
+          client_id: string | null
+          created_at: string
+          customer_name: string
+          customer_phone: string | null
+          date_iso: string
+          id: string
+          owner_id: string
+          paid: boolean
+          price: number
+          provider_id: string
+          service: string
+          updated_at: string
+        }
+        Insert: {
+          branch_id: string
+          client_id?: string | null
+          created_at?: string
+          customer_name: string
+          customer_phone?: string | null
+          date_iso: string
+          id?: string
+          owner_id: string
+          paid?: boolean
+          price?: number
+          provider_id: string
+          service: string
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string
+          client_id?: string | null
+          created_at?: string
+          customer_name?: string
+          customer_phone?: string | null
+          date_iso?: string
+          id?: string
+          owner_id?: string
+          paid?: boolean
+          price?: number
+          provider_id?: string
+          service?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      monthly_closures: {
+        Row: {
+          cash_collected: number
+          created_at: string
+          debts_deducted: number
+          digital: number
+          gross_commission: number
+          id: string
+          month: string
+          net_settlement: number
+          owner_id: string
+          paid: boolean
+          paid_at: string | null
+          partner_name: string
+          partner_nid: string
+          updated_at: string
+        }
+        Insert: {
+          cash_collected?: number
+          created_at?: string
+          debts_deducted?: number
+          digital?: number
+          gross_commission?: number
+          id?: string
+          month: string
+          net_settlement?: number
+          owner_id: string
+          paid?: boolean
+          paid_at?: string | null
+          partner_name: string
+          partner_nid: string
+          updated_at?: string
+        }
+        Update: {
+          cash_collected?: number
+          created_at?: string
+          debts_deducted?: number
+          digital?: number
+          gross_commission?: number
+          id?: string
+          month?: string
+          net_settlement?: number
+          owner_id?: string
+          paid?: boolean
+          paid_at?: string | null
+          partner_name?: string
+          partner_nid?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      orders: {
+        Row: {
+          client_id: string | null
+          country_code: string | null
+          created_at: string
+          customer: string
+          dest_zone: string | null
+          distance_km: number
+          driver_id: string | null
+          dropoff: string
+          extra: Json
+          fare_egp: number
+          id: string
+          merchant_id: string | null
+          owner_id: string
+          pickup: string
+          service: string
+          status: string
+          stops: Json
+          updated_at: string
+          vehicle: string
+          zone: string | null
+        }
+        Insert: {
+          client_id?: string | null
+          country_code?: string | null
+          created_at?: string
+          customer: string
+          dest_zone?: string | null
+          distance_km?: number
+          driver_id?: string | null
+          dropoff: string
+          extra?: Json
+          fare_egp?: number
+          id?: string
+          merchant_id?: string | null
+          owner_id: string
+          pickup: string
+          service: string
+          status?: string
+          stops?: Json
+          updated_at?: string
+          vehicle: string
+          zone?: string | null
+        }
+        Update: {
+          client_id?: string | null
+          country_code?: string | null
+          created_at?: string
+          customer?: string
+          dest_zone?: string | null
+          distance_km?: number
+          driver_id?: string | null
+          dropoff?: string
+          extra?: Json
+          fare_egp?: number
+          id?: string
+          merchant_id?: string | null
+          owner_id?: string
+          pickup?: string
+          service?: string
+          status?: string
+          stops?: Json
+          updated_at?: string
+          vehicle?: string
+          zone?: string | null
+        }
+        Relationships: []
+      }
+      partner_applications: {
+        Row: {
+          center: string | null
+          client_id: string | null
+          created_at: string
+          governorate: string | null
+          id: string
+          kind: string
+          name: string
+          owner_id: string
+          partner_nid: string
+          payload: Json
+          phone: string | null
+          reason: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          center?: string | null
+          client_id?: string | null
+          created_at?: string
+          governorate?: string | null
+          id?: string
+          kind: string
+          name: string
+          owner_id: string
+          partner_nid: string
+          payload?: Json
+          phone?: string | null
+          reason?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          center?: string | null
+          client_id?: string | null
+          created_at?: string
+          governorate?: string | null
+          id?: string
+          kind?: string
+          name?: string
+          owner_id?: string
+          partner_nid?: string
+          payload?: Json
+          phone?: string | null
+          reason?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      partner_inbox: {
+        Row: {
+          client_id: string | null
+          created_at: string
+          id: string
+          kind: string
+          owner_id: string
+          partner_nid: string
+          password: string | null
+          reason: string | null
+          target_name: string
+          target_role: string
+          username: string | null
+        }
+        Insert: {
+          client_id?: string | null
+          created_at?: string
+          id?: string
+          kind: string
+          owner_id: string
+          partner_nid: string
+          password?: string | null
+          reason?: string | null
+          target_name: string
+          target_role: string
+          username?: string | null
+        }
+        Update: {
+          client_id?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          owner_id?: string
+          partner_nid?: string
+          password?: string | null
+          reason?: string | null
+          target_name?: string
+          target_role?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
+      wallets: {
+        Row: {
+          actor_id: string
+          actor_kind: string
+          balance: number
+          currency: string
+          id: string
+          owner_id: string
+          updated_at: string
+        }
+        Insert: {
+          actor_id: string
+          actor_kind: string
+          balance?: number
+          currency?: string
+          id?: string
+          owner_id: string
+          updated_at?: string
+        }
+        Update: {
+          actor_id?: string
+          actor_kind?: string
+          balance?: number
+          currency?: string
+          id?: string
+          owner_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
