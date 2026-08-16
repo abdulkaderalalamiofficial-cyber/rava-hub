@@ -7,6 +7,7 @@ import { useCustomerBlock } from "../hooks/useCustomerBlock";
 import { SparePartsBreakdownPin } from "../components/SparePartsBreakdownPin";
 import { usePlatformConfig } from "../platformConfig";
 import { BOOKS } from "../data/booksSeed";
+import { filterByZone, isOpenZoneService, checkVehicleZone, zoneBadgeAr } from "../geoZoning";
 
 function CustomerPaymentMethods() {
   const { cfg } = usePlatformConfig();
@@ -327,6 +328,7 @@ export function CustomerApp() {
       groups.get(k)!.push(it);
     });
     const orders: import("../store").Order[] = [];
+    const blocked: string[] = [];
     groups.forEach((items) => {
       const folder = items[0].folderId;
       const subtotal = items.reduce((s, x) => s + x.price * x.qty, 0);
@@ -336,6 +338,18 @@ export function CustomerApp() {
       const dropoff = folder === "spare" && breakdownPin
         ? `📍 موقع العطل ${breakdownPin.lat.toFixed(5)},${breakdownPin.lng.toFixed(5)}`
         : (profile.center || profile.governorate || "—");
+      // Strict zone enforcement for motorcycle / tricycle deliveries.
+      const merchantZone = state.merchants.find((m) => m.id === items[0].merchantId)?.zone;
+      const zoneCheck = checkVehicleZone(v, {
+        originZone: merchantZone,
+        destZone: profile.center || profile.governorate,
+        distanceKm: 4,
+        customerZone,
+      });
+      if (!zoneCheck.allowed) {
+        blocked.push(`${items[0].merchantName}: ${zoneCheck.reasonAr}`);
+        return;
+      }
       orders.push({
         id: uid(),
         service: items[0].category,
@@ -354,6 +368,12 @@ export function CustomerApp() {
         stops: items.map((x) => `${x.name} × ${x.qty}`),
       });
     });
+    if (blocked.length > 0) {
+      dispatch({ type: "addNotif", n: { id: uid(), ts: Date.now(),
+        title: "طلبات خارج النطاق الجغرافي 🚫",
+        body: blocked.join(" — ") } });
+    }
+    if (orders.length === 0) return;
     dispatch({ type: "addOrders", orders });
     dispatch({ type: "addNotif", n: { id: uid(), ts: Date.now(),
       title: `تم تقسيم السلة إلى ${orders.length} طلب${orders.length > 1 ? "ات" : ""} مستقلة 🚚`,
@@ -393,27 +413,38 @@ export function CustomerApp() {
     setTimeout(() => fn?.(), 0);
   };
 
+  // ---------- Geo-zoning ----------
+  const customerZone = useMemo(
+    () => ({ governorate: profile.governorate, center: profile.center }),
+    [profile.governorate, profile.center],
+  );
+
   // ---------- Mall data ----------
   const activeFolder = openFolder ? MALL_FOLDERS.find((f) => f.id === openFolder) : null;
   const folderMerchants = useMemo(() => {
     if (!activeFolder) return [];
     const q = search.trim().toLowerCase();
-    const base = state.merchants
-      .filter((m) => activeFolder.categories.includes(m.category))
-      .filter((m) => !q || m.name.toLowerCase().includes(q));
+    // Restaurants / shops are zone-specific; open-zone services are untouched.
+    const base = filterByZone(
+      activeFolder.id,
+      state.merchants.filter((m) => activeFolder.categories.includes(m.category)),
+      customerZone,
+    ).filter((m) => !q || m.name.toLowerCase().includes(q));
     if (!mallTab) return base;
     return base.filter((m) => m.name.toLowerCase().includes(mallTab.toLowerCase()));
-  }, [activeFolder, state.merchants, search, mallTab]);
+  }, [activeFolder, state.merchants, search, mallTab, customerZone]);
 
   // ---------- Per-Partner Activation (per center + category) ----------
-  // A folder is "live" in the user's center only if at least one approved merchant
-  // for that category has been registered there by a franchise partner.
-  const isFolderActive = (folder: { categories: ServiceType[] }) => {
-    const center = profile.center;
-    if (!center) return false;
-    return state.merchants.some(
-      (m) => folder.categories.includes(m.category) && (m.zone === center || m.zone === profile.governorate),
-    );
+  // Open-zone services (library, rides) are always live. Zone-specific folders
+  // are live only when an approved merchant exists in the customer's zone.
+  const isFolderActive = (folder: { id?: string; categories: ServiceType[] }) => {
+    if (folder.id && isOpenZoneService(folder.id)) return true;
+    if (!profile.governorate) return false;
+    return filterByZone(
+      folder.id ?? "",
+      state.merchants.filter((m) => folder.categories.includes(m.category)),
+      customerZone,
+    ).length > 0;
   };
 
   // Merchant prep + +5min buffer mock timer
@@ -485,6 +516,7 @@ export function CustomerApp() {
         <Section title="نفسك في إيه دلوقتي؟ 😋" subtitle="مول رافا الذكي">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
             {MALL_FOLDERS.filter((f) => f.id !== "mall" && f.id !== "spare").map((f) => {
+              const live = isFolderActive(f);
               return (
                 <button key={f.id}
                   onClick={() => { setOpenFolder(f.id); setMallTab(null); }}
@@ -493,8 +525,8 @@ export function CustomerApp() {
                   <div className="text-2xl mb-1">{f.emoji}</div>
                   <div className="text-xs font-bold leading-tight">{f.title}</div>
                   <div className="text-[10px] text-muted-foreground mt-0.5">{f.desc}</div>
-                  <div className="absolute top-1.5 start-1.5 text-[8px] px-1.5 py-0.5 rounded-full font-bold flex items-center gap-0.5 bg-success/20 text-success">
-                    متاح
+                  <div className={`absolute top-1.5 start-1.5 text-[8px] px-1.5 py-0.5 rounded-full font-bold flex items-center gap-0.5 ${live ? "bg-success/20 text-success" : "bg-muted text-muted-foreground"}`}>
+                    {live ? zoneBadgeAr(f.id, customerZone) : "قريباً في منطقتك"}
                   </div>
                 </button>
               );
@@ -507,6 +539,9 @@ export function CustomerApp() {
               <div className="text-2xl mb-1">📚</div>
               <div className="text-xs font-bold leading-tight">المكتبات والقرطاسيات</div>
               <div className="text-[10px] text-muted-foreground mt-0.5">كتب · قرطاسية · أدوات مدرسية</div>
+              <div className="absolute top-1.5 start-1.5 text-[8px] px-1.5 py-0.5 rounded-full font-bold bg-gold/20 text-gold">
+                {zoneBadgeAr("libraries", customerZone)}
+              </div>
             </button>
           </div>
 
