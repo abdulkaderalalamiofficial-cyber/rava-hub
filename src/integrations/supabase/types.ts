@@ -570,6 +570,36 @@ export type Database = {
         }
         Relationships: []
       }
+      user_preferences: {
+        Row: {
+          categories: Json
+          created_at: string
+          first_seen: string
+          last_greeted: string | null
+          updated_at: string
+          user_id: string
+          visits: number
+        }
+        Insert: {
+          categories?: Json
+          created_at?: string
+          first_seen?: string
+          last_greeted?: string | null
+          updated_at?: string
+          user_id: string
+          visits?: number
+        }
+        Update: {
+          categories?: Json
+          created_at?: string
+          first_seen?: string
+          last_greeted?: string | null
+          updated_at?: string
+          user_id?: string
+          visits?: number
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -596,6 +626,8 @@ export type Database = {
           actor_id: string
           actor_kind: string
           balance: number
+          cash_in_hand: number
+          credit_limit: number
           currency: string
           id: string
           owner_id: string
@@ -605,6 +637,8 @@ export type Database = {
           actor_id: string
           actor_kind: string
           balance?: number
+          cash_in_hand?: number
+          credit_limit?: number
           currency?: string
           id?: string
           owner_id: string
@@ -614,6 +648,8 @@ export type Database = {
           actor_id?: string
           actor_kind?: string
           balance?: number
+          cash_in_hand?: number
+          credit_limit?: number
           currency?: string
           id?: string
           owner_id?: string
