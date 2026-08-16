@@ -328,6 +328,7 @@ export function CustomerApp() {
       groups.get(k)!.push(it);
     });
     const orders: import("../store").Order[] = [];
+    const blocked: string[] = [];
     groups.forEach((items) => {
       const folder = items[0].folderId;
       const subtotal = items.reduce((s, x) => s + x.price * x.qty, 0);
@@ -337,6 +338,18 @@ export function CustomerApp() {
       const dropoff = folder === "spare" && breakdownPin
         ? `📍 موقع العطل ${breakdownPin.lat.toFixed(5)},${breakdownPin.lng.toFixed(5)}`
         : (profile.center || profile.governorate || "—");
+      // Strict zone enforcement for motorcycle / tricycle deliveries.
+      const merchantZone = state.merchants.find((m) => m.id === items[0].merchantId)?.zone;
+      const zoneCheck = checkVehicleZone(v, {
+        originZone: merchantZone,
+        destZone: profile.center || profile.governorate,
+        distanceKm: 4,
+        customerZone,
+      });
+      if (!zoneCheck.allowed) {
+        blocked.push(`${items[0].merchantName}: ${zoneCheck.reasonAr}`);
+        return;
+      }
       orders.push({
         id: uid(),
         service: items[0].category,
