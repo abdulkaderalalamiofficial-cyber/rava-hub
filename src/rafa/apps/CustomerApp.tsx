@@ -368,6 +368,12 @@ export function CustomerApp() {
         stops: items.map((x) => `${x.name} × ${x.qty}`),
       });
     });
+    if (blocked.length > 0) {
+      dispatch({ type: "addNotif", n: { id: uid(), ts: Date.now(),
+        title: "طلبات خارج النطاق الجغرافي 🚫",
+        body: blocked.join(" — ") } });
+    }
+    if (orders.length === 0) return;
     dispatch({ type: "addOrders", orders });
     dispatch({ type: "addNotif", n: { id: uid(), ts: Date.now(),
       title: `تم تقسيم السلة إلى ${orders.length} طلب${orders.length > 1 ? "ات" : ""} مستقلة 🚚`,
