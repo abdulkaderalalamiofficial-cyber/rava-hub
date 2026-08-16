@@ -394,27 +394,38 @@ export function CustomerApp() {
     setTimeout(() => fn?.(), 0);
   };
 
+  // ---------- Geo-zoning ----------
+  const customerZone = useMemo(
+    () => ({ governorate: profile.governorate, center: profile.center }),
+    [profile.governorate, profile.center],
+  );
+
   // ---------- Mall data ----------
   const activeFolder = openFolder ? MALL_FOLDERS.find((f) => f.id === openFolder) : null;
   const folderMerchants = useMemo(() => {
     if (!activeFolder) return [];
     const q = search.trim().toLowerCase();
-    const base = state.merchants
-      .filter((m) => activeFolder.categories.includes(m.category))
-      .filter((m) => !q || m.name.toLowerCase().includes(q));
+    // Restaurants / shops are zone-specific; open-zone services are untouched.
+    const base = filterByZone(
+      activeFolder.id,
+      state.merchants.filter((m) => activeFolder.categories.includes(m.category)),
+      customerZone,
+    ).filter((m) => !q || m.name.toLowerCase().includes(q));
     if (!mallTab) return base;
     return base.filter((m) => m.name.toLowerCase().includes(mallTab.toLowerCase()));
-  }, [activeFolder, state.merchants, search, mallTab]);
+  }, [activeFolder, state.merchants, search, mallTab, customerZone]);
 
   // ---------- Per-Partner Activation (per center + category) ----------
-  // A folder is "live" in the user's center only if at least one approved merchant
-  // for that category has been registered there by a franchise partner.
-  const isFolderActive = (folder: { categories: ServiceType[] }) => {
-    const center = profile.center;
-    if (!center) return false;
-    return state.merchants.some(
-      (m) => folder.categories.includes(m.category) && (m.zone === center || m.zone === profile.governorate),
-    );
+  // Open-zone services (library, rides) are always live. Zone-specific folders
+  // are live only when an approved merchant exists in the customer's zone.
+  const isFolderActive = (folder: { id?: string; categories: ServiceType[] }) => {
+    if (folder.id && isOpenZoneService(folder.id)) return true;
+    if (!profile.governorate) return false;
+    return filterByZone(
+      folder.id ?? "",
+      state.merchants.filter((m) => folder.categories.includes(m.category)),
+      customerZone,
+    ).length > 0;
   };
 
   // Merchant prep + +5min buffer mock timer
