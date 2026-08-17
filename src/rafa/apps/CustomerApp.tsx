@@ -562,8 +562,23 @@ export function CustomerApp() {
             );
           })()}
 
-          {/* Full-width: مكتبة RAVA الرقمية — Open Zone (لا يعتمد على الموقع أو شريك المنطقة) */}
-          <RavaDigitalLibraryCard />
+          {/* Full-width: مكتبة RAVA الرقمية — Open Zone (صفحة مستقلة بكل الأقسام) */}
+          <Link
+            to="/library"
+            className="group mt-2 w-full p-4 rounded-xl border bg-card hover:border-gold transition-all text-start relative overflow-hidden flex items-center gap-3">
+            <div className="absolute -end-4 -top-4 text-6xl opacity-10 group-hover:opacity-20 transition-opacity">📚</div>
+            <div className="text-3xl">📚</div>
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-bold leading-tight flex items-center gap-2">
+                مكتبة RAVA الرقمية
+                <span className="text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-success/20 text-success">مفتوحة</span>
+              </div>
+              <div className="text-[11px] text-muted-foreground mt-0.5">
+                {LIBRARY_CATEGORIES.length} أقسام · {ALL_BOOKS.length} كتاب — متاحة في كل المحافظات
+              </div>
+            </div>
+          </Link>
+
 
 
           {/* Full-width: قطع غيار وإكسسوارات السيارات والمعدات (Needle to Rocket) */}
