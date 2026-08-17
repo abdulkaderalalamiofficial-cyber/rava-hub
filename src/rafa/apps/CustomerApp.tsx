@@ -641,8 +641,6 @@ export function CustomerApp() {
 
       {/* Right column: active order only (wallet moved to top of feed) */}
       <div className="space-y-5">
-
-
         {activeOrder && (
           <div className="p-4 rounded-2xl border-2 border-gold bg-gradient-surface shadow-royal space-y-3">
             <div className="flex items-center justify-between">
