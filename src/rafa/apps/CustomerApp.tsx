@@ -513,99 +513,57 @@ export function CustomerApp() {
           />
         </div>
 
-        {/* MID: Mall first */}
-        <Section title="نفسك في إيه دلوقتي؟ 😋" subtitle="مول رافا الذكي">
+        {/* Family Wallet — top of feed */}
+        <div className="p-4 rounded-2xl bg-card border shadow-card relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-gold opacity-10 pointer-events-none" />
+          <div className="relative">
+            <div className="flex items-center gap-2 text-sm font-semibold">
+              <Wallet className="w-4 h-4 text-gold" /> {t("familyWallet")}
+            </div>
+            <div className="text-3xl font-bold mt-2 bg-gradient-royal bg-clip-text text-transparent">
+              {state.walletCustomer.toFixed(0)} <span className="text-sm text-muted-foreground font-normal">{t("egp")}</span>
+            </div>
+            <div className="text-[11px] text-muted-foreground mt-1">{t("balance")}</div>
+            <div className="mt-3 pt-3 border-t">
+              <div className="text-[10px] uppercase font-bold text-muted-foreground mb-1.5 flex items-center gap-1"><UsersIcon className="w-3 h-3" /> {t("familyMembers")}</div>
+              <div className="flex flex-wrap gap-1.5">
+                {state.family.map((f) => (
+                  <span key={f.name} className="text-[11px] px-2 py-1 rounded-full chip-silver font-semibold">{f.name} · {f.share}%</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Local merchant services unified grid */}
+        <Section title="نفسك في إيه دلوقتي؟ 😋" subtitle="خدمات رافا المحلية في منطقتك">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-            {MALL_FOLDERS.filter((f) => f.id !== "mall" && f.id !== "spare").map((f) => {
+            {MALL_FOLDERS.map((f) => {
               const live = isFolderActive(f);
+              const isWide = f.id === "mall" || f.id === "spare";
               return (
                 <button key={f.id}
                   onClick={() => { setOpenFolder(f.id); setMallTab(null); }}
-                  className="group p-3 rounded-xl border bg-card transition-all text-start relative overflow-hidden hover:border-gold">
+                  className={`group p-3 rounded-xl border bg-card transition-all text-start relative overflow-hidden hover:border-gold ${isWide ? "col-span-2 md:col-span-3 flex items-center gap-3" : ""}`}>
                   <div className="absolute -end-4 -top-4 text-5xl opacity-10 group-hover:opacity-20 transition-opacity">{f.emoji}</div>
-                  <div className="text-2xl mb-1">{f.emoji}</div>
-                  <div className="text-xs font-bold leading-tight">{f.title}</div>
-                  <div className="text-[10px] text-muted-foreground mt-0.5">{f.desc}</div>
+                  <div className={`${isWide ? "text-3xl" : "text-2xl mb-1"}`}>{f.emoji}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className={`font-bold leading-tight ${isWide ? "text-sm" : "text-xs"}`}>{f.title}</div>
+                    <div className={`text-muted-foreground mt-0.5 ${isWide ? "text-[11px]" : "text-[10px]"}`}>{f.desc}</div>
+                    {isWide && f.id === "spare" && (
+                      <div className="text-[10px] text-gold/80 mt-1">🚛 توصيل بمركبات الشحن (تروسيكل · دبابة · ونش)</div>
+                    )}
+                  </div>
                   <div className={`absolute top-1.5 start-1.5 text-[8px] px-1.5 py-0.5 rounded-full font-bold flex items-center gap-0.5 ${live ? "bg-success/20 text-success" : "bg-muted text-muted-foreground"}`}>
                     {live ? zoneBadgeAr(f.id, customerZone) : "قريباً في منطقتك"}
                   </div>
                 </button>
               );
             })}
-
-            <button
-              onClick={() => { setBookingService("libraries"); setBookingGov(profile.governorate || ""); setBookingProvider(""); setBookingDate(""); }}
-              className="group p-3 rounded-xl border bg-card hover:border-gold transition-all text-start relative overflow-hidden">
-              <div className="absolute -end-4 -top-4 text-5xl opacity-10 group-hover:opacity-20 transition-opacity">📚</div>
-              <div className="text-2xl mb-1">📚</div>
-              <div className="text-xs font-bold leading-tight">المكتبات والقرطاسيات</div>
-              <div className="text-[10px] text-muted-foreground mt-0.5">كتب · قرطاسية · أدوات مدرسية</div>
-              <div className="absolute top-1.5 start-1.5 text-[8px] px-1.5 py-0.5 rounded-full font-bold bg-gold/20 text-gold">
-                {zoneBadgeAr("libraries", customerZone)}
-              </div>
-            </button>
           </div>
-
-          {/* Full-width: مول رافا التجاري */}
-          {(() => {
-            const mall = MALL_FOLDERS.find((f) => f.id === "mall")!;
-            return (
-              <button
-                onClick={() => { setOpenFolder(mall.id); setMallTab(null); }}
-                className="group mt-2 w-full p-4 rounded-xl border bg-card hover:border-gold transition-all text-start relative overflow-hidden flex items-center gap-3">
-                <div className="absolute -end-4 -top-4 text-6xl opacity-10 group-hover:opacity-20 transition-opacity">{mall.emoji}</div>
-                <div className="text-3xl">{mall.emoji}</div>
-                <div className="flex-1">
-                  <div className="text-sm font-bold leading-tight">{mall.title}</div>
-                  <div className="text-[11px] text-muted-foreground mt-0.5">{mall.desc}</div>
-                </div>
-              </button>
-            );
-          })()}
-
-          {/* Full-width: مكتبة RAVA الرقمية — Open Zone (صفحة مستقلة بكل الأقسام) */}
-          <Link
-            to="/library"
-            className="group mt-2 w-full p-4 rounded-xl border bg-card hover:border-gold transition-all text-start relative overflow-hidden flex items-center gap-3">
-            <div className="absolute -end-4 -top-4 text-6xl opacity-10 group-hover:opacity-20 transition-opacity">📚</div>
-            <div className="text-3xl">📚</div>
-            <div className="flex-1 min-w-0">
-              <div className="text-sm font-bold leading-tight flex items-center gap-2">
-                مكتبة RAVA الرقمية
-                <span className="text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-success/20 text-success">مفتوحة</span>
-              </div>
-              <div className="text-[11px] text-muted-foreground mt-0.5">
-                {LIBRARY_CATEGORIES.length} أقسام · {ALL_BOOKS.length} كتاب — متاحة في كل المحافظات
-              </div>
-            </div>
-          </Link>
-
-
-
-          {/* Full-width: قطع غيار وإكسسوارات السيارات والمعدات (Needle to Rocket) */}
-          {(() => {
-            const spare = MALL_FOLDERS.find((f) => f.id === "spare")!;
-            return (
-              <button
-                onClick={() => { setOpenFolder(spare.id); setMallTab(null); }}
-                className="group mt-2 w-full p-4 rounded-xl border-2 bg-gradient-to-br from-card via-card to-gold/5 text-start relative overflow-hidden flex items-center gap-3 shadow-card transition-all border-gold/40 hover:border-gold">
-                <div className="absolute -end-4 -top-4 text-6xl opacity-10 group-hover:opacity-20 transition-opacity">{spare.emoji}</div>
-                <div className="text-3xl">{spare.emoji}</div>
-                <div className="flex-1">
-                  <div className="text-sm font-bold leading-tight flex items-center gap-2">
-                    {spare.title}
-                    <span className="text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-success/20 text-success">متاح في منطقتك</span>
-                  </div>
-                  <div className="text-[11px] text-muted-foreground mt-0.5">{spare.desc}</div>
-                  <div className="text-[10px] text-gold/80 mt-1">🚛 توصيل بمركبات الشحن (تروسيكل · دبابة · ونش)</div>
-                </div>
-              </button>
-            );
-          })()}
-
         </Section>
 
-        {/* BOTTOM: Vehicles */}
+        {/* MIDDLE: Vehicles */}
         <Section title="جاي على مزاجك تركب إيه دلوقتي؟ 😎" subtitle="اختر المركبة">
           <div className="grid grid-cols-3 gap-2">
             {FLEET_GRID.map((v) => {
@@ -645,8 +603,23 @@ export function CustomerApp() {
           </div>
         </Section>
 
-        {/* RAVA Bookings & Services — National coverage */}
-        <Section title="حجوزات وخدمات رافا 🏥" subtitle="حجز عيادات · معامل · صالونات — بحث وطني في كل المحافظات">
+        {/* BOTTOM: Library + Medical & Aesthetic bookings */}
+        <Section title="مكتبة رافا وحجوزاتك 🏥📚" subtitle="كتب وقرطاسية · عيادات · معامل · صالونات">
+          <Link
+            to="/library"
+            className="group w-full p-4 rounded-xl border bg-card hover:border-gold transition-all text-start relative overflow-hidden flex items-center gap-3 mb-2">
+            <div className="absolute -end-4 -top-4 text-6xl opacity-10 group-hover:opacity-20 transition-opacity">📚</div>
+            <div className="text-3xl">📚</div>
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-bold leading-tight flex items-center gap-2">
+                مكتبة RAVA الرقمية
+                <span className="text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-success/20 text-success">مفتوحة</span>
+              </div>
+              <div className="text-[11px] text-muted-foreground mt-0.5">
+                {LIBRARY_CATEGORIES.length} أقسام · {ALL_BOOKS.length} كتاب — متاحة في كل المحافظات
+              </div>
+            </div>
+          </Link>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
             {BOOKING_SERVICES.filter((s) => s.id !== "libraries").map((s) => (
               <button key={s.id}
@@ -666,29 +639,8 @@ export function CustomerApp() {
 
       </div>
 
-      {/* Right column: wallet + active order */}
+      {/* Right column: active order only (wallet moved to top of feed) */}
       <div className="space-y-5">
-        <div className="p-4 rounded-2xl bg-card border shadow-card relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-gold opacity-10 pointer-events-none" />
-          <div className="relative">
-            <div className="flex items-center gap-2 text-sm font-semibold">
-              <Wallet className="w-4 h-4 text-gold" /> {t("familyWallet")}
-            </div>
-            <div className="text-3xl font-bold mt-2 bg-gradient-royal bg-clip-text text-transparent">
-              {state.walletCustomer.toFixed(0)} <span className="text-sm text-muted-foreground font-normal">{t("egp")}</span>
-            </div>
-            <div className="text-[11px] text-muted-foreground mt-1">{t("balance")}</div>
-            <div className="mt-3 pt-3 border-t">
-              <div className="text-[10px] uppercase font-bold text-muted-foreground mb-1.5 flex items-center gap-1"><UsersIcon className="w-3 h-3" /> {t("familyMembers")}</div>
-              <div className="flex flex-wrap gap-1.5">
-                {state.family.map((f) => (
-                  <span key={f.name} className="text-[11px] px-2 py-1 rounded-full chip-silver font-semibold">{f.name} · {f.share}%</span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
         {activeOrder && (
           <div className="p-4 rounded-2xl border-2 border-gold bg-gradient-surface shadow-royal space-y-3">
             <div className="flex items-center justify-between">
