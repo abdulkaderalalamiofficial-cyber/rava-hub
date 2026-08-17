@@ -6,7 +6,8 @@ import { EGYPT_CENTERS } from "../data/egyptCenters";
 import { useCustomerBlock } from "../hooks/useCustomerBlock";
 import { SparePartsBreakdownPin } from "../components/SparePartsBreakdownPin";
 import { usePlatformConfig } from "../platformConfig";
-import { BOOKS } from "../data/booksSeed";
+import { Link } from "@tanstack/react-router";
+import { ALL_BOOKS, LIBRARY_CATEGORIES } from "../data/libraryCatalog";
 import { filterByZone, isOpenZoneService, checkVehicleZone, zoneBadgeAr } from "../geoZoning";
 
 function CustomerPaymentMethods() {
@@ -562,8 +563,23 @@ export function CustomerApp() {
             );
           })()}
 
-          {/* Full-width: مكتبة RAVA الرقمية — Open Zone (لا يعتمد على الموقع أو شريك المنطقة) */}
-          <RavaDigitalLibraryCard />
+          {/* Full-width: مكتبة RAVA الرقمية — Open Zone (صفحة مستقلة بكل الأقسام) */}
+          <Link
+            to="/library"
+            className="group mt-2 w-full p-4 rounded-xl border bg-card hover:border-gold transition-all text-start relative overflow-hidden flex items-center gap-3">
+            <div className="absolute -end-4 -top-4 text-6xl opacity-10 group-hover:opacity-20 transition-opacity">📚</div>
+            <div className="text-3xl">📚</div>
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-bold leading-tight flex items-center gap-2">
+                مكتبة RAVA الرقمية
+                <span className="text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-success/20 text-success">مفتوحة</span>
+              </div>
+              <div className="text-[11px] text-muted-foreground mt-0.5">
+                {LIBRARY_CATEGORIES.length} أقسام · {ALL_BOOKS.length} كتاب — متاحة في كل المحافظات
+              </div>
+            </div>
+          </Link>
+
 
 
           {/* Full-width: قطع غيار وإكسسوارات السيارات والمعدات (Needle to Rocket) */}
@@ -1648,83 +1664,5 @@ function RegistrationModal(props: {
   );
 }
 
-// ============= RAVA Digital Library (Open Zone) =============
-const EXTRA_BOOKS: { title: string; author: string; category: string; price: number }[] = [
-  { title: "حكايات ما قبل النوم", author: "سميرة عبد الله", category: "كتب أطفال", price: 45 },
-  { title: "مغامرات نور والقمر", author: "أحمد سليم", category: "كتب أطفال", price: 50 },
-  { title: "الأرنب الذكي", author: "منى فؤاد", category: "كتب أطفال", price: 40 },
-  { title: "قصة الحضارة", author: "ويل ديورانت", category: "تاريخ وسير", price: 380 },
-  { title: "مصر القديمة", author: "سليم حسن", category: "تاريخ وسير", price: 290 },
-  { title: "سيرة ابن هشام", author: "ابن هشام", category: "تاريخ وسير", price: 210 },
-  { title: "تاريخ موجز للزمن", author: "ستيفن هوكينج", category: "علوم", price: 185 },
-  { title: "الكون في قشرة جوز", author: "ستيفن هوكينج", category: "علوم", price: 195 },
-  { title: "أصل الأنواع", author: "تشارلز داروين", category: "علوم", price: 240 },
-];
-
-function RavaDigitalLibraryCard() {
-  const [open, setOpen] = useState<string | null>(null);
-  const cats = [
-    { id: "روايات", icon: "📖" },
-    { id: "قصص", icon: "📚" },
-    { id: "كتب دينية", icon: "🕌" },
-    { id: "كتب تعليمية", icon: "🎓" },
-    { id: "ملخصات كتب", icon: "📝" },
-    { id: "كتب أطفال", icon: "🧒" },
-    { id: "تاريخ وسير", icon: "🏛️" },
-    { id: "علوم", icon: "🔬" },
-  ];
-  const all = [...BOOKS, ...EXTRA_BOOKS];
-  const countOf = (c: string) => all.filter((b) => b.category === c).length;
-  const books = open ? all.filter((b) => b.category === open) : [];
-
-  return (
-    <div className="group mt-2 w-full max-w-full p-4 rounded-xl border bg-card hover:border-gold transition-all text-start relative overflow-hidden" dir="rtl">
-      <div className="absolute -end-4 -top-4 text-6xl opacity-10 group-hover:opacity-20 transition-opacity">📚</div>
-      <div className="flex items-center gap-3 min-w-0">
-        <div className="text-3xl shrink-0">📚</div>
-        <div className="flex-1 min-w-0">
-          <div className="text-sm font-bold leading-tight truncate">مكتبة RAVA الرقمية</div>
-          <div className="text-[11px] text-muted-foreground mt-0.5">Open Zone — متاحة عالمياً بدون موقع أو توصيل</div>
-        </div>
-        <span className="shrink-0 text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-success/20 text-success">مفتوحة</span>
-      </div>
-
-      {!open ? (
-        <div className="mt-3 grid grid-cols-2 md:grid-cols-3 gap-2">
-          {cats.map((c) => (
-            <button key={c.id} onClick={() => setOpen(c.id)}
-              className="group/i p-3 rounded-xl border bg-card hover:border-gold transition-all text-start relative overflow-hidden min-w-0">
-              <div className="absolute -end-4 -top-4 text-5xl opacity-10 group-hover/i:opacity-20 transition-opacity">{c.icon}</div>
-              <div className="text-2xl mb-1">{c.icon}</div>
-              <div className="text-xs font-bold leading-tight truncate">{c.id}</div>
-              <div className="text-[10px] text-muted-foreground mt-0.5">{countOf(c.id)} كتاب</div>
-            </button>
-          ))}
-        </div>
-      ) : (
-        <div className="mt-3">
-          <div className="flex items-center justify-between gap-2 mb-2">
-            <div className="text-xs font-bold">{open} · {books.length} كتاب</div>
-            <button onClick={() => setOpen(null)}
-              className="text-[10px] px-2 py-1 rounded-lg border hover:border-gold font-bold">⟵ كل الأقسام</button>
-          </div>
-          <div className="grid grid-cols-1 gap-2">
-            {books.map((b) => (
-              <div key={b.title} className="flex items-center gap-2 p-2 rounded-xl border bg-card min-w-0">
-                <div className="w-9 h-12 rounded-md bg-gradient-to-br from-gold/30 to-gold/5 grid place-items-center text-lg shrink-0">📕</div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs font-bold truncate">{b.title}</div>
-                  <div className="text-[10px] text-muted-foreground truncate">{b.author}</div>
-                </div>
-                <div className="shrink-0 text-[11px] font-bold text-gold">{b.price} ج</div>
-                <button className="shrink-0 text-[10px] px-2 py-1 rounded-lg bg-gold text-gold-foreground font-bold">شراء</button>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
 
 
