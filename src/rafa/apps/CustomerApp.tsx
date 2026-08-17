@@ -639,28 +639,9 @@ export function CustomerApp() {
 
       </div>
 
-      {/* Right column: wallet + active order */}
+      {/* Right column: active order only (wallet moved to top of feed) */}
       <div className="space-y-5">
-        <div className="p-4 rounded-2xl bg-card border shadow-card relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-gold opacity-10 pointer-events-none" />
-          <div className="relative">
-            <div className="flex items-center gap-2 text-sm font-semibold">
-              <Wallet className="w-4 h-4 text-gold" /> {t("familyWallet")}
-            </div>
-            <div className="text-3xl font-bold mt-2 bg-gradient-royal bg-clip-text text-transparent">
-              {state.walletCustomer.toFixed(0)} <span className="text-sm text-muted-foreground font-normal">{t("egp")}</span>
-            </div>
-            <div className="text-[11px] text-muted-foreground mt-1">{t("balance")}</div>
-            <div className="mt-3 pt-3 border-t">
-              <div className="text-[10px] uppercase font-bold text-muted-foreground mb-1.5 flex items-center gap-1"><UsersIcon className="w-3 h-3" /> {t("familyMembers")}</div>
-              <div className="flex flex-wrap gap-1.5">
-                {state.family.map((f) => (
-                  <span key={f.name} className="text-[11px] px-2 py-1 rounded-full chip-silver font-semibold">{f.name} · {f.share}%</span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+
 
         {activeOrder && (
           <div className="p-4 rounded-2xl border-2 border-gold bg-gradient-surface shadow-royal space-y-3">
