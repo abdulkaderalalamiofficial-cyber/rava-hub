@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "../i18n";
+import { useServerFn } from "@tanstack/react-start";
 import { ShieldCheck, Lock, ArrowRight, AlertTriangle } from "lucide-react";
 import { RavaLogo } from "./RavaLogo";
+import { verifyControlPassword } from "@/lib/control-room.functions";
 
-const CONTROL_PASSWORD = "Abdou1996";
 const STORAGE_KEY = "rava_control_unlocked";
 const MAX_ATTEMPTS = 5;
 const LOCK_SECONDS = 60;
@@ -11,8 +12,10 @@ const LOCK_SECONDS = 60;
 export function AdminGate({ children }: { children: React.ReactNode }) {
   const { lang } = useI18n();
   const ar = lang === "ar";
+  const verify = useServerFn(verifyControlPassword);
   const [unlocked, setUnlocked] = useState(false);
   const [password, setPassword] = useState("");
+  const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [attempts, setAttempts] = useState(0);
   const [lockLeft, setLockLeft] = useState(0);
@@ -47,40 +50,44 @@ export function AdminGate({ children }: { children: React.ReactNode }) {
 
   useEffect(() => () => { if (lockTimer.current) clearInterval(lockTimer.current); }, []);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (locked) return;
-    if (password === CONTROL_PASSWORD) {
-      try {
-        sessionStorage.setItem(STORAGE_KEY, "1");
-      } catch {
-        /* ignore */
+    if (locked || busy) return;
+    setBusy(true);
+    try {
+      const { ok } = await verify({ data: { password } });
+      if (ok) {
+        try {
+          sessionStorage.setItem(STORAGE_KEY, "1");
+        } catch {
+          /* ignore */
+        }
+        setError(null);
+        setAttempts(0);
+        setPassword("");
+        setUnlocked(true);
+        return;
       }
-      setError(null);
-      setAttempts(0);
-      setUnlocked(true);
-      return;
-    }
-    const next = attempts + 1;
-    setAttempts(next);
-    setPassword("");
-    if (next >= MAX_ATTEMPTS) {
-      startLock();
-      setError(
-        ar
+      const next = attempts + 1;
+      setAttempts(next);
+      setPassword("");
+      if (next >= MAX_ATTEMPTS) {
+        startLock();
+        setError(ar
           ? `تجاوزت عدد المحاولات المسموح بها. تم القفل مؤقتًا لمدة ${LOCK_SECONDS} ثانية.`
-          : `Too many attempts. Locked for ${LOCK_SECONDS} seconds.`,
-      );
-    } else {
-      const left = MAX_ATTEMPTS - next;
-      setError(
-        ar
+          : `Too many attempts. Locked for ${LOCK_SECONDS} seconds.`);
+      } else {
+        const left = MAX_ATTEMPTS - next;
+        setError(ar
           ? `كلمة المرور غير صحيحة. المحاولات المتبقية: ${left}`
-          : `Incorrect password. ${left} attempt(s) left.`,
-      );
+          : `Incorrect password. ${left} attempt(s) left.`);
+      }
+    } catch {
+      setError(ar ? "تعذر التحقق من كلمة المرور. حاول مجددًا." : "Could not verify the password. Try again.");
+    } finally {
+      setBusy(false);
     }
   };
-
 
   if (unlocked) return <>{children}</>;
 
@@ -103,12 +110,10 @@ export function AdminGate({ children }: { children: React.ReactNode }) {
               <ShieldCheck className="w-7 h-7" />
             </div>
             <h1 className="text-xl font-black mt-3">
-              {lang === "ar" ? "غرفة التحكم المركزية" : "Central Control Room"}
+              {ar ? "غرفة التحكم المركزية" : "Central Control Room"}
             </h1>
             <p className="text-[11px] text-muted-foreground mt-1">
-              {lang === "ar"
-                ? "أدخل كلمة المرور للدخول"
-                : "Enter the password to continue"}
+              {ar ? "أدخل كلمة المرور للدخول" : "Enter the password to continue"}
             </p>
           </div>
 
@@ -123,7 +128,7 @@ export function AdminGate({ children }: { children: React.ReactNode }) {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 autoFocus
-                disabled={locked}
+                disabled={locked || busy}
                 className="w-full px-4 py-3 rounded-xl border-2 border-border bg-background text-sm focus:border-gold focus:outline-none disabled:opacity-50"
               />
             </div>
@@ -145,15 +150,14 @@ export function AdminGate({ children }: { children: React.ReactNode }) {
             )}
             <button
               type="submit"
-              disabled={locked}
+              disabled={locked || busy}
               className="w-full py-3 rounded-xl bg-gradient-royal text-primary-foreground font-bold text-sm shadow-royal flex items-center justify-center gap-2 disabled:opacity-50"
             >
               <Lock className="w-4 h-4" />
-              {locked ? (ar ? "مقفل مؤقتًا" : "Locked") : ar ? "دخول" : "Enter"}
-              {!locked && <ArrowRight className="w-4 h-4" />}
+              {locked ? (ar ? "مقفل مؤقتًا" : "Locked") : busy ? (ar ? "جارٍ التحقق..." : "Verifying...") : ar ? "دخول" : "Enter"}
+              {!locked && !busy && <ArrowRight className="w-4 h-4" />}
             </button>
           </form>
-
         </div>
       </div>
     </div>
