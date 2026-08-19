@@ -9,31 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PartnerRouteImport } from './routes/partner'
-import { Route as MerchantRouteImport } from './routes/merchant'
-import { Route as MedicalRouteImport } from './routes/medical'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LibraryRouteImport } from './routes/library'
-import { Route as CustomerRouteImport } from './routes/customer'
-import { Route as CaptainRouteImport } from './routes/captain'
-import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppPartnerRouteImport } from './routes/app.partner'
+import { Route as AppMerchantRouteImport } from './routes/app.merchant'
+import { Route as AppMedicalRouteImport } from './routes/app.medical'
+import { Route as AppCustomerRouteImport } from './routes/app.customer'
+import { Route as AppCaptainRouteImport } from './routes/app.captain'
 
-const PartnerRoute = PartnerRouteImport.update({
-  id: '/partner',
-  path: '/partner',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MerchantRoute = MerchantRouteImport.update({
-  id: '/merchant',
-  path: '/merchant',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MedicalRoute = MedicalRouteImport.update({
-  id: '/medical',
-  path: '/medical',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -44,132 +28,114 @@ const LibraryRoute = LibraryRouteImport.update({
   path: '/library',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CustomerRoute = CustomerRouteImport.update({
-  id: '/customer',
-  path: '/customer',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CaptainRoute = CaptainRouteImport.update({
-  id: '/captain',
-  path: '/captain',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppPartnerRoute = AppPartnerRouteImport.update({
+  id: '/app/partner',
+  path: '/app/partner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppMerchantRoute = AppMerchantRouteImport.update({
+  id: '/app/merchant',
+  path: '/app/merchant',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppMedicalRoute = AppMedicalRouteImport.update({
+  id: '/app/medical',
+  path: '/app/medical',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppCustomerRoute = AppCustomerRouteImport.update({
+  id: '/app/customer',
+  path: '/app/customer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppCaptainRoute = AppCaptainRouteImport.update({
+  id: '/app/captain',
+  path: '/app/captain',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
-  '/captain': typeof CaptainRoute
-  '/customer': typeof CustomerRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
-  '/medical': typeof MedicalRoute
-  '/merchant': typeof MerchantRoute
-  '/partner': typeof PartnerRoute
+  '/app/captain': typeof AppCaptainRoute
+  '/app/customer': typeof AppCustomerRoute
+  '/app/medical': typeof AppMedicalRoute
+  '/app/merchant': typeof AppMerchantRoute
+  '/app/partner': typeof AppPartnerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
-  '/captain': typeof CaptainRoute
-  '/customer': typeof CustomerRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
-  '/medical': typeof MedicalRoute
-  '/merchant': typeof MerchantRoute
-  '/partner': typeof PartnerRoute
+  '/app/captain': typeof AppCaptainRoute
+  '/app/customer': typeof AppCustomerRoute
+  '/app/medical': typeof AppMedicalRoute
+  '/app/merchant': typeof AppMerchantRoute
+  '/app/partner': typeof AppPartnerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
-  '/captain': typeof CaptainRoute
-  '/customer': typeof CustomerRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
-  '/medical': typeof MedicalRoute
-  '/merchant': typeof MerchantRoute
-  '/partner': typeof PartnerRoute
+  '/app/captain': typeof AppCaptainRoute
+  '/app/customer': typeof AppCustomerRoute
+  '/app/medical': typeof AppMedicalRoute
+  '/app/merchant': typeof AppMerchantRoute
+  '/app/partner': typeof AppPartnerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/admin'
-    | '/captain'
-    | '/customer'
     | '/library'
     | '/login'
-    | '/medical'
-    | '/merchant'
-    | '/partner'
+    | '/app/captain'
+    | '/app/customer'
+    | '/app/medical'
+    | '/app/merchant'
+    | '/app/partner'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
-    | '/captain'
-    | '/customer'
     | '/library'
     | '/login'
-    | '/medical'
-    | '/merchant'
-    | '/partner'
+    | '/app/captain'
+    | '/app/customer'
+    | '/app/medical'
+    | '/app/merchant'
+    | '/app/partner'
   id:
     | '__root__'
     | '/'
-    | '/admin'
-    | '/captain'
-    | '/customer'
     | '/library'
     | '/login'
-    | '/medical'
-    | '/merchant'
-    | '/partner'
+    | '/app/captain'
+    | '/app/customer'
+    | '/app/medical'
+    | '/app/merchant'
+    | '/app/partner'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
-  CaptainRoute: typeof CaptainRoute
-  CustomerRoute: typeof CustomerRoute
   LibraryRoute: typeof LibraryRoute
   LoginRoute: typeof LoginRoute
-  MedicalRoute: typeof MedicalRoute
-  MerchantRoute: typeof MerchantRoute
-  PartnerRoute: typeof PartnerRoute
+  AppCaptainRoute: typeof AppCaptainRoute
+  AppCustomerRoute: typeof AppCustomerRoute
+  AppMedicalRoute: typeof AppMedicalRoute
+  AppMerchantRoute: typeof AppMerchantRoute
+  AppPartnerRoute: typeof AppPartnerRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/partner': {
-      id: '/partner'
-      path: '/partner'
-      fullPath: '/partner'
-      preLoaderRoute: typeof PartnerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/merchant': {
-      id: '/merchant'
-      path: '/merchant'
-      fullPath: '/merchant'
-      preLoaderRoute: typeof MerchantRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/medical': {
-      id: '/medical'
-      path: '/medical'
-      fullPath: '/medical'
-      preLoaderRoute: typeof MedicalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -184,27 +150,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LibraryRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/customer': {
-      id: '/customer'
-      path: '/customer'
-      fullPath: '/customer'
-      preLoaderRoute: typeof CustomerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/captain': {
-      id: '/captain'
-      path: '/captain'
-      fullPath: '/captain'
-      preLoaderRoute: typeof CaptainRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -212,19 +157,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/partner': {
+      id: '/app/partner'
+      path: '/app/partner'
+      fullPath: '/app/partner'
+      preLoaderRoute: typeof AppPartnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/merchant': {
+      id: '/app/merchant'
+      path: '/app/merchant'
+      fullPath: '/app/merchant'
+      preLoaderRoute: typeof AppMerchantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/medical': {
+      id: '/app/medical'
+      path: '/app/medical'
+      fullPath: '/app/medical'
+      preLoaderRoute: typeof AppMedicalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/customer': {
+      id: '/app/customer'
+      path: '/app/customer'
+      fullPath: '/app/customer'
+      preLoaderRoute: typeof AppCustomerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/captain': {
+      id: '/app/captain'
+      path: '/app/captain'
+      fullPath: '/app/captain'
+      preLoaderRoute: typeof AppCaptainRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
-  CaptainRoute: CaptainRoute,
-  CustomerRoute: CustomerRoute,
   LibraryRoute: LibraryRoute,
   LoginRoute: LoginRoute,
-  MedicalRoute: MedicalRoute,
-  MerchantRoute: MerchantRoute,
-  PartnerRoute: PartnerRoute,
+  AppCaptainRoute: AppCaptainRoute,
+  AppCustomerRoute: AppCustomerRoute,
+  AppMedicalRoute: AppMedicalRoute,
+  AppMerchantRoute: AppMerchantRoute,
+  AppPartnerRoute: AppPartnerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
