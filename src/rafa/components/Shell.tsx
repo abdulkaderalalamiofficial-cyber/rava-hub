@@ -61,6 +61,11 @@ export function Shell({ role, roleLabel, children }: { role: Role; roleLabel: st
               className="p-2 rounded-lg bg-secondary hover:bg-accent/30 transition-colors border border-[color-mix(in_oklab,var(--color-gold)_30%,transparent)]">
               {dark ? <Sun className="w-4 h-4 text-gold" /> : <Moon className="w-4 h-4 text-primary" />}
             </button>
+            <button onClick={exitToLogin} title={lang === "ar" ? "تسجيل الخروج" : "Log out"}
+              className="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors flex items-center gap-1.5 border border-destructive/30">
+              <LogOut className="w-3.5 h-3.5" />{lang === "ar" ? "خروج" : "Log out"}
+            </button>
+
           </div>
         </div>
         <div className="gold-divider" />
