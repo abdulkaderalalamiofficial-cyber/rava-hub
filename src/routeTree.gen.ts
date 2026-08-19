@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SuperAdminControlRoomRouteImport } from './routes/super-admin.control-room'
 import { Route as AppPartnerRouteImport } from './routes/app.partner'
 import { Route as AppMerchantRouteImport } from './routes/app.merchant'
 import { Route as AppMedicalRouteImport } from './routes/app.medical'
@@ -31,6 +32,11 @@ const LibraryRoute = LibraryRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuperAdminControlRoomRoute = SuperAdminControlRoomRouteImport.update({
+  id: '/super-admin/control-room',
+  path: '/super-admin/control-room',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppPartnerRoute = AppPartnerRouteImport.update({
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/app/medical': typeof AppMedicalRoute
   '/app/merchant': typeof AppMerchantRoute
   '/app/partner': typeof AppPartnerRoute
+  '/super-admin/control-room': typeof SuperAdminControlRoomRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByTo {
   '/app/medical': typeof AppMedicalRoute
   '/app/merchant': typeof AppMerchantRoute
   '/app/partner': typeof AppPartnerRoute
+  '/super-admin/control-room': typeof SuperAdminControlRoomRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +97,7 @@ export interface FileRoutesById {
   '/app/medical': typeof AppMedicalRoute
   '/app/merchant': typeof AppMerchantRoute
   '/app/partner': typeof AppPartnerRoute
+  '/super-admin/control-room': typeof SuperAdminControlRoomRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +110,7 @@ export interface FileRouteTypes {
     | '/app/medical'
     | '/app/merchant'
     | '/app/partner'
+    | '/super-admin/control-room'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/app/medical'
     | '/app/merchant'
     | '/app/partner'
+    | '/super-admin/control-room'
   id:
     | '__root__'
     | '/'
@@ -121,6 +132,7 @@ export interface FileRouteTypes {
     | '/app/medical'
     | '/app/merchant'
     | '/app/partner'
+    | '/super-admin/control-room'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,6 +144,7 @@ export interface RootRouteChildren {
   AppMedicalRoute: typeof AppMedicalRoute
   AppMerchantRoute: typeof AppMerchantRoute
   AppPartnerRoute: typeof AppPartnerRoute
+  SuperAdminControlRoomRoute: typeof SuperAdminControlRoomRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -155,6 +168,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/super-admin/control-room': {
+      id: '/super-admin/control-room'
+      path: '/super-admin/control-room'
+      fullPath: '/super-admin/control-room'
+      preLoaderRoute: typeof SuperAdminControlRoomRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/partner': {
@@ -204,6 +224,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppMedicalRoute: AppMedicalRoute,
   AppMerchantRoute: AppMerchantRoute,
   AppPartnerRoute: AppPartnerRoute,
+  SuperAdminControlRoomRoute: SuperAdminControlRoomRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
