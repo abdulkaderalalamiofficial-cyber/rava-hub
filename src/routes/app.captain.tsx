@@ -8,7 +8,7 @@ import { VoiceCompanion } from "@/rafa/components/VoiceCompanion";
 import { startBackgroundMode } from "@/lib/pwa";
 import { ensureNotificationPermission } from "@/lib/notify";
 
-export const Route = createFileRoute("/captain")({
+export const Route = createFileRoute("/app/captain")({
   component: CaptainRoute,
   head: () => ({
     meta: [
