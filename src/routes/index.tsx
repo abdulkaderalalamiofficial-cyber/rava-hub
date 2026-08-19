@@ -1,14 +1,14 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { I18nProvider } from "@/rafa/i18n";
-import { StoreProvider } from "@/rafa/store";
-import { Gateway, type GatewayRole } from "@/rafa/gateway/Gateway";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
-  component: Index,
+  beforeLoad: () => {
+    throw redirect({ to: "/login", replace: true });
+  },
+  component: () => null,
   head: () => ({
     meta: [
       { title: "Rava Super App — منصة التنقل والتجارة الذكية" },
-      { name: "description", content: "منصة رافا الموحدة: رحلات، توصيل، شحن، تجارة، خدمات طبية وامتياز المناطق — بواجهة عربية/إنجليزية ولكل دور شاشة مستقلة." },
+      { name: "description", content: "منصة رافا الموحدة: رحلات، توصيل، شحن، تجارة، خدمات طبية وامتياز المناطق — بواجهة عربية/إنجليزية ولكل دور تطبيق مستقل." },
       { property: "og:title", content: "Rava Super App — منصة التنقل والتجارة الذكية" },
       { property: "og:description", content: "رحلات، توصيل، شحن، تجارة وخدمات طبية في تطبيق واحد." },
       { property: "og:type", content: "website" },
@@ -21,28 +21,3 @@ export const Route = createFileRoute("/")({
     ],
   }),
 });
-
-const ROLE_PATH: Record<GatewayRole, string> = {
-  customer: "/customer",
-  merchant: "/merchant",
-  medical: "/medical",
-  partner: "/partner",
-  admin: "/admin",
-  captain: "/captain",
-  captainUnified: "/captain",
-};
-
-function Index() {
-  return (
-    <I18nProvider>
-      <StoreProvider>
-        <GatewayRouter />
-      </StoreProvider>
-    </I18nProvider>
-  );
-}
-
-function GatewayRouter() {
-  const navigate = useNavigate();
-  return <Gateway onEnter={(_country, role) => navigate({ to: ROLE_PATH[role] })} />;
-}
