@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { RoleScreen } from "@/rafa/RoleScreen";
 import { MerchantApp } from "@/rafa/apps/MerchantApp";
 
-export const Route = createFileRoute("/merchant")({
+export const Route = createFileRoute("/app/merchant")({
   component: () => <RoleScreen role="merchant" background><MerchantApp /></RoleScreen>,
   head: () => ({
     meta: [

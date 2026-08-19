@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as MerchantRouteImport } from './routes/merchant'
 import { Route as MedicalRouteImport } from './routes/medical'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as CustomerRouteImport } from './routes/customer'
 import { Route as CaptainRouteImport } from './routes/captain'
@@ -31,6 +32,11 @@ const MerchantRoute = MerchantRouteImport.update({
 const MedicalRoute = MedicalRouteImport.update({
   id: '/medical',
   path: '/medical',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LibraryRoute = LibraryRouteImport.update({
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/captain': typeof CaptainRoute
   '/customer': typeof CustomerRoute
   '/library': typeof LibraryRoute
+  '/login': typeof LoginRoute
   '/medical': typeof MedicalRoute
   '/merchant': typeof MerchantRoute
   '/partner': typeof PartnerRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/captain': typeof CaptainRoute
   '/customer': typeof CustomerRoute
   '/library': typeof LibraryRoute
+  '/login': typeof LoginRoute
   '/medical': typeof MedicalRoute
   '/merchant': typeof MerchantRoute
   '/partner': typeof PartnerRoute
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/captain': typeof CaptainRoute
   '/customer': typeof CustomerRoute
   '/library': typeof LibraryRoute
+  '/login': typeof LoginRoute
   '/medical': typeof MedicalRoute
   '/merchant': typeof MerchantRoute
   '/partner': typeof PartnerRoute
@@ -98,6 +107,7 @@ export interface FileRouteTypes {
     | '/captain'
     | '/customer'
     | '/library'
+    | '/login'
     | '/medical'
     | '/merchant'
     | '/partner'
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/captain'
     | '/customer'
     | '/library'
+    | '/login'
     | '/medical'
     | '/merchant'
     | '/partner'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/captain'
     | '/customer'
     | '/library'
+    | '/login'
     | '/medical'
     | '/merchant'
     | '/partner'
@@ -129,6 +141,7 @@ export interface RootRouteChildren {
   CaptainRoute: typeof CaptainRoute
   CustomerRoute: typeof CustomerRoute
   LibraryRoute: typeof LibraryRoute
+  LoginRoute: typeof LoginRoute
   MedicalRoute: typeof MedicalRoute
   MerchantRoute: typeof MerchantRoute
   PartnerRoute: typeof PartnerRoute
@@ -155,6 +168,13 @@ declare module '@tanstack/react-router' {
       path: '/medical'
       fullPath: '/medical'
       preLoaderRoute: typeof MedicalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/library': {
@@ -201,6 +221,7 @@ const rootRouteChildren: RootRouteChildren = {
   CaptainRoute: CaptainRoute,
   CustomerRoute: CustomerRoute,
   LibraryRoute: LibraryRoute,
+  LoginRoute: LoginRoute,
   MedicalRoute: MedicalRoute,
   MerchantRoute: MerchantRoute,
   PartnerRoute: PartnerRoute,
