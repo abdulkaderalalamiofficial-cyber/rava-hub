@@ -19,7 +19,7 @@ export function LibraryApp() {
       <div className="p-5 rounded-2xl border border-gold/40 bg-card shadow-card relative overflow-hidden">
         <div className="absolute -end-6 -top-6 text-8xl opacity-10">📚</div>
         <div className="relative flex items-center gap-3 flex-wrap">
-          <Link to="/customer" className="p-2 rounded-xl border hover:border-gold transition-colors" aria-label="رجوع">
+          <Link to="/app/customer" className="p-2 rounded-xl border hover:border-gold transition-colors" aria-label="رجوع">
             <ArrowRight className="w-4 h-4" />
           </Link>
           <div className="text-4xl">📚</div>
