@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { useI18n, type Lang } from "../i18n";
+import { useI18n } from "../i18n";
 import { useStore } from "../store";
-import { Languages, LogOut, Moon, Sun } from "lucide-react";
 import { SOSButton } from "./SOSButton";
 import { AlertOverlay } from "./AlertOverlay";
 import { RavaLogo } from "./RavaLogo";
+import { ProfileSheet } from "./ProfileSheet";
 
 export type Role = "customer" | "merchant" | "captain" | "partner" | "admin" | "medical";
 
