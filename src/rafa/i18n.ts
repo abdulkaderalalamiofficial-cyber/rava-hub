@@ -592,12 +592,11 @@ export type DictKey = keyof typeof dict.en;
 type Ctx = { lang: Lang; setLang: (l: Lang) => void; t: (k: DictKey | string) => string; dir: "ltr" | "rtl" };
 const I18nCtx = createContext<Ctx | null>(null);
 
+/** Language follows the device settings only — there is no manual toggle. */
 function detectLang(): Lang {
   if (typeof navigator === "undefined") return "en";
-  const stored = typeof localStorage !== "undefined" ? localStorage.getItem("rafa-lang") : null;
-  if (stored === "ar" || stored === "en") return stored;
-  const sys = (navigator.language || "en").toLowerCase();
-  return sys.startsWith("ar") ? "ar" : "en";
+  const langs = [navigator.language, ...(navigator.languages ?? [])].filter(Boolean) as string[];
+  return langs.some((l) => l.toLowerCase().startsWith("ar")) ? "ar" : "en";
 }
 
 export function I18nProvider({ children }: { children: ReactNode }) {
@@ -607,7 +606,6 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     const dir = lang === "ar" ? "rtl" : "ltr";
     document.documentElement.lang = lang;
     document.documentElement.dir = dir;
-    try { localStorage.setItem("rafa-lang", lang); } catch {}
   }, [lang]);
   const setLang = (l: Lang) => setLangState(l);
   const t = (k: DictKey | string) => (dict[lang] as any)[k] ?? (dict.en as any)[k] ?? String(k);
