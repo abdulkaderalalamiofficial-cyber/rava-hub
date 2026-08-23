@@ -10,7 +10,7 @@ import { ProfileSheet } from "./ProfileSheet";
 export type Role = "customer" | "merchant" | "captain" | "partner" | "admin" | "medical";
 
 export function Shell({ role, roleLabel, children }: { role: Role; roleLabel: string; children: ReactNode }) {
-  const { t, lang, setLang, dir } = useI18n();
+  const { dir } = useI18n();
   const { state } = useStore();
   const navigate = useNavigate();
   const [dark, setDark] = useState(false);
