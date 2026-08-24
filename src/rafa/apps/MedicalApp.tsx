@@ -78,16 +78,16 @@ export function MedicalApp() {
         <button onClick={() => { setActiveId(null); setUsername(""); setPassword(""); }} className="text-xs px-3 py-1.5 rounded-lg bg-secondary font-semibold">خروج</button>
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <Stat icon={TrendingUp} label="إجمالي الحجوزات" value={String(bookings.length)} />
         <Stat icon={Wallet} label="إجمالي المبيعات (كاش)" value={`${totalSales} ج.م`} />
         <Stat icon={ShieldCheck} label={`عمولة رافا (${provider.commissionPct}%)`} value={`${commissionDue} ج.م`} highlight />
       </div>
 
-      <div className="flex gap-1.5 p-1 rounded-xl bg-secondary">
+      <div className="flex flex-wrap gap-1.5 p-1 rounded-xl bg-secondary">
         {([["branches", "الفروع والمواقع"], ["schedule", "أيام العمل والجدول"], ["sales", "المبيعات والعمولة"]] as const).map(([id, label]) => (
           <button key={id} onClick={() => setTab(id)}
-            className={cn("flex-1 px-3 py-1.5 rounded-lg text-xs font-bold", tab === id ? "bg-gradient-royal text-primary-foreground shadow-elegant" : "")}>
+            className={cn("flex-1 min-w-[7rem] px-3 py-2 rounded-lg text-xs font-bold transition-all", tab === id ? "bg-gradient-royal text-primary-foreground shadow-elegant" : "")}>
             {label}
           </button>
         ))}
@@ -258,7 +258,7 @@ function SalesPanel({ provider, bookings, onMarkPaid }: { provider: MedicalProvi
         <div className="text-[11px] text-muted-foreground">يقوم العميل بسداد قيمة الخدمة نقداً عند الزيارة. عمولة رافا ({provider.commissionPct}%) محسوبة على إجمالي مبيعاتك ومستحقة كدين لشركة رافا في نهاية الشهر.</div>
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <Stat icon={Wallet} label="إجمالي المبيعات" value={`${totalSales} ج.م`} />
         <Stat icon={ShieldCheck} label="عمولة محصلة" value={`${Math.round(commissionPaid)} ج.م`} />
         <Stat icon={KeyRound} label="عمولة مستحقة لرافا" value={`${Math.round(commissionDue)} ج.م`} highlight />
