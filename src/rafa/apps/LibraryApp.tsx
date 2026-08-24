@@ -1,11 +1,40 @@
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Search } from "lucide-react";
+import { ArrowRight, Search, Link2, Check, Share2, X } from "lucide-react";
 import { ALL_BOOKS, LIBRARY_CATEGORIES, booksInCategory } from "../data/libraryCatalog";
+
+type Book = { title: string; author: string; category: string; price: number };
+
+export const bookSlug = (b: Book) =>
+  `${b.category}-${b.title}`.trim().replace(/\s+/g, "-").replace(/[^\p{L}\p{N}-]/gu, "");
+
+export function promoLink(b: Book) {
+  const origin = typeof window !== "undefined" ? window.location.origin : "https://rava-hub.lovable.app";
+  const p = new URLSearchParams({ book: bookSlug(b), cat: b.category, ref: "customer-promo" });
+  return `${origin}/library?${p.toString()}`;
+}
 
 export function LibraryApp() {
   const [open, setOpen] = useState<string | null>(null);
   const [q, setQ] = useState("");
+  const [detail, setDetail] = useState<Book | null>(null);
+  const [copied, setCopied] = useState<string | null>(null);
+
+  const copy = async (b: Book) => {
+    const url = promoLink(b);
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      const el = document.createElement("textarea");
+      el.value = url;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand("copy");
+      el.remove();
+    }
+    setCopied(bookSlug(b));
+    setTimeout(() => setCopied(null), 2000);
+  };
 
   const books = useMemo(() => {
     const base = open ? booksInCategory(open) : ALL_BOOKS;
