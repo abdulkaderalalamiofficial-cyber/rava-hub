@@ -36,6 +36,13 @@ export function LibraryApp() {
     setTimeout(() => setCopied(null), 2000);
   };
 
+  useEffect(() => {
+    const slug = new URLSearchParams(window.location.search).get("book");
+    if (!slug) return;
+    const found = ALL_BOOKS.find((b) => bookSlug(b) === slug);
+    if (found) { setOpen(found.category); setDetail(found); }
+  }, []);
+
   const books = useMemo(() => {
     const base = open ? booksInCategory(open) : ALL_BOOKS;
     const term = q.trim();
