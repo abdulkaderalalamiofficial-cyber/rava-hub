@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Search, Link2, Check, Share2, X } from "lucide-react";
 import { ALL_BOOKS, LIBRARY_CATEGORIES, booksInCategory } from "../data/libraryCatalog";
