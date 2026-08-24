@@ -92,17 +92,54 @@ export function LibraryApp() {
         ))}
       </div>
 
+      {detail && (
+        <div className="p-4 rounded-2xl border-2 border-gold/50 bg-card shadow-card space-y-3">
+          <div className="flex items-start gap-3">
+            <div className="w-14 h-20 rounded-lg bg-gradient-to-br from-gold/30 to-gold/5 grid place-items-center text-2xl shrink-0">📕</div>
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-bold">{detail.title}</div>
+              <div className="text-[11px] text-muted-foreground">{detail.author} · {detail.category}</div>
+              <div className="text-sm font-bold text-gold mt-1">{detail.price} ج.م</div>
+            </div>
+            <button onClick={() => setDetail(null)} className="p-1.5 rounded-lg border hover:border-gold" aria-label="إغلاق">
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="space-y-2">
+            <div className="text-[11px] font-bold flex items-center gap-1.5"><Share2 className="w-3.5 h-3.5 text-gold" />رابط ترويجي للمشاركة</div>
+            <div className="flex items-center gap-2">
+              <input readOnly value={promoLink(detail)} onFocus={(e) => e.currentTarget.select()} dir="ltr"
+                className="flex-1 min-w-0 px-3 py-2 rounded-xl border bg-background text-[10px] font-mono" />
+              <button onClick={() => copy(detail)}
+                className="shrink-0 px-3 py-2 rounded-xl bg-gradient-royal text-primary-foreground text-[11px] font-bold flex items-center gap-1.5">
+                {copied === bookSlug(detail) ? <Check className="w-3.5 h-3.5" /> : <Link2 className="w-3.5 h-3.5" />}
+                {copied === bookSlug(detail) ? "تم النسخ" : "نسخ الرابط"}
+              </button>
+            </div>
+            <p className="text-[10px] text-muted-foreground">شارك الرابط مع أي شخص — سيفتح المكتبة مباشرة على هذا الكتاب.</p>
+          </div>
+        </div>
+      )}
+
       <div>
         <div className="text-xs font-bold mb-2">{open ?? "كل الكتب"} · {books.length} كتاب</div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {books.map((b) => (
-            <div key={`${b.category}-${b.title}`} className="flex items-center gap-2 p-2 rounded-xl border bg-card min-w-0">
-              <div className="w-9 h-12 rounded-md bg-gradient-to-br from-gold/30 to-gold/5 grid place-items-center text-lg shrink-0">📕</div>
-              <div className="flex-1 min-w-0">
-                <div className="text-xs font-bold truncate">{b.title}</div>
-                <div className="text-[10px] text-muted-foreground truncate">{b.author}</div>
-              </div>
+            <div key={`${b.category}-${b.title}`}
+              className={`flex items-center gap-2 p-2 rounded-xl border bg-card min-w-0 transition-colors ${detail && bookSlug(detail) === bookSlug(b) ? "border-gold" : ""}`}>
+              <button onClick={() => setDetail(b)} className="flex items-center gap-2 flex-1 min-w-0 text-start">
+                <div className="w-9 h-12 rounded-md bg-gradient-to-br from-gold/30 to-gold/5 grid place-items-center text-lg shrink-0">📕</div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-bold truncate">{b.title}</div>
+                  <div className="text-[10px] text-muted-foreground truncate">{b.author}</div>
+                </div>
+              </button>
               <div className="shrink-0 text-[11px] font-bold text-gold">{b.price} ج</div>
+              <button onClick={() => copy(b)} title="نسخ رابط ترويجي"
+                className="shrink-0 p-1.5 rounded-lg border hover:border-gold text-muted-foreground hover:text-gold">
+                {copied === bookSlug(b) ? <Check className="w-3.5 h-3.5 text-success" /> : <Link2 className="w-3.5 h-3.5" />}
+              </button>
               <button className="shrink-0 text-[10px] px-2 py-1 rounded-lg bg-gold text-gold-foreground font-bold">شراء</button>
             </div>
           ))}
